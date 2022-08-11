@@ -1,5 +1,6 @@
 const Sequelize = require("sequelize");
 const db = require("../config/database");
+const stc = require("../models/student_classes"); // import student class module
 const model = db.define(
   "student",
   {
@@ -23,4 +24,8 @@ const model = db.define(
     tableName: "student",
   }
 );
+
+model.associate = (model) => {
+  model.hasOne(stc, { foreignKey: "student_id" });
+};
 module.exports = model;

@@ -1,14 +1,17 @@
 const Sequelize = require("sequelize");
 const db = require("../config/database");
+const Classes = require("../models/class");
+const student = require("../models/student");
+
 const model = db.define(
-  "course",
+  "student_classes",
   {
     student_id: {
       type: Sequelize.INTEGER,
       primaryKey: true,
       unique: true,
     },
-    Class_name: {
+    name: {
       type: Sequelize.STRING,
       primaryKey: true,
     },
@@ -21,7 +24,18 @@ const model = db.define(
   },
   {
     timestamps: false,
-    tableName: "course",
+    tableName: "student_classes",
+    onUpdate: "CASCADE",
+    onDelete: "CASCADE",
   }
 );
+Classes.associate = (model) => {
+  Classes.belongsTo(model, { foreignKey: "name" });
+};
+// Classes.belongsTo(model, { foreignKey: "name" });
+
+student.associate = (model) => {
+  student.belongsTo(model, { foreignKey: "name" });
+};
+
 module.exports = model;

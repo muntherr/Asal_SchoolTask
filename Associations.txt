@@ -1,0 +1,13 @@
+one to one : means one rows can linked to one another  row in the other table.
+like ssn belong to one person 
+
+
+
+
+
+The relation between the teacher  and the class is many to many 
+The relation between the student and the class is one to many 
+
+To create one to one on sequlize
+parentTable.hasOne(childTable); -- > Child have a foriegn key 
+

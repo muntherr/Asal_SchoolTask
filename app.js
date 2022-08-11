@@ -3,23 +3,24 @@ const path = require("path");
 
 const app = express();
 const bodyParser = require("body-parser");
+app.use(bodyParser.json())
 //Create a server
-const port = process.env.port || 3000;
+const port = process.env.port || 3001;
 app.get("/", (req, res) => res.send("INDEX"));
 app.listen(port, console.log(`Server started on port ${port}`));
 // Students Routes
 app.use("/student", require("./routes/studentRoutes"));
 // Class Routes
 app.use("/class", require("./routes/classRoutes"));
-// Students Routes
+// homework Routes
 app.use("/homework", require("./routes/homeworkRoutes"));
-// Course Routes
+// studentClasses Routes
 app.use("/studentClasses", require("./routes/studentClassesRoutes"));
-// Class Routes
+// subject Routes
 app.use("/subject", require("./routes/subjectRoutes"));
-// Class Routes
+// TAC Routes
 app.use("/TAC", require("./routes/teacherassignedcourseRoutes"));
-
+//
 app.use("/teacher", require("./routes/teacherRoutes"));
 
 //DataBase
