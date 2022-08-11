@@ -128,8 +128,8 @@ router.get("/SearchByID/:id", (req, res) => {
 //  If i have a one PK i can use findByPk
 router.get("/SearchByID/:id/:name", (req, res) => {
   let id = req.params.id;
-  let name = req.params.name;
 
+  let name = req.params.name;
   console.log(id + name);
   studentClass
     .findAll({
