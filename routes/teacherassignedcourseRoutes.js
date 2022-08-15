@@ -1,6 +1,6 @@
 /*
  *
- *This file will include all the routes for the student table.
+ *This file will include all the routes for the teacherAssignedCourse table.
  *
  */
 
@@ -10,6 +10,7 @@ const db = require("../config/database");
 const teacherModel = require("../models/teacher");
 const teacherAssignedClass = require("../models/teacherassignedclass");
 
+/* DEFINE A FORGIEN KEYS BETWEEN THE TABLES*/
 teacherAssignedClass.hasOne(teacherModel, {
   foreignKey: "teacher_id",
 });
@@ -17,7 +18,8 @@ teacherModel.belongsTo(teacherAssignedClass, {
   foreignKey: "teacher_id",
 });
 
-// Get
+/***************************************** FIND ALL INFORMATION ******************************************/
+
 router.get("/", (req, res) =>
   teacherAssignedClass
     .findAll()
@@ -32,8 +34,9 @@ router.get("/", (req, res) =>
     )
 );
 
-// Delete a teacher  by ID
-router.delete("/DeleteByID/:id", (req, res) => {
+/***************************************** DELETE TEACHER BY ID WITH M-N RELATION ******************************************/
+
+router.delete("/:id", (req, res) => {
   const { id } = req.params;
   console.log(id);
   teacherAssignedClass.findByPk(id).then((teacherAssignedClass) => {
@@ -53,9 +56,9 @@ router.delete("/DeleteByID/:id", (req, res) => {
       });
   });
 });
+/***************************************** ADD A NEW TEACHER ******************************************/
 
-// Linke Teacher with class
-router.post("/Add", async function (req, res) {
+router.post("/", async function (req, res) {
   console.log(req.body);
   teacherAssignedClass
     .create({
@@ -67,8 +70,9 @@ router.post("/Add", async function (req, res) {
   console.log(req);
 });
 
-// Link Teacher with class
-router.patch("/Update/:id", async function (req, res) {
+/***************************************** UPDATE A TEACHER INFORMATION WITH THE ASSIGNED CLASS ******************************************/
+
+router.patch("/:id", async function (req, res) {
   console.log(req.body);
   const { id } = req.params;
   teacherAssignedClass

@@ -28,7 +28,6 @@ const model = db.define(
   }
 );
 
-
 Classes.associate = (model) => {
   Classes.belongsTo(model, { foreignKey: "name" });
 };

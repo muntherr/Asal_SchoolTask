@@ -30,3 +30,4 @@ const db = require("./config/database");
 db.authenticate()
   .then(() => console.log("DataBase connected .. "))
   .catch((err) => console.log("Error: " + err));
+module.exports = app;

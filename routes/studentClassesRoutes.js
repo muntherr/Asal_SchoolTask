@@ -93,13 +93,14 @@ router.get("/SearchByID/:id", (req, res) => {
       },
     })
     .then((studentClassOP) => {
+   
       res.json(studentClassOP);
     });
 });
 
-// Search by student_ID
+/***************************************** SEARCH BY STUDENT ID AND NAME ******************************************/
 // Here I have two PK's so i used a normal findAll method
-//  If i have a one PK i can use findByPk
+// If i have a one PK i can use findByPk
 router.get("/SearchByID/:id/:name", (req, res) => {
   let id = req.params.id;
 
@@ -114,6 +115,7 @@ router.get("/SearchByID/:id/:name", (req, res) => {
     })
     .then((studentClassOP) => {
       if (studentClassOP) {
+        console.log('su ',studentClassOP)
         res.json(studentClassOP);
       } else {
         res.status(404).send();

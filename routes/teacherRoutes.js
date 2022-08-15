@@ -5,7 +5,6 @@
  */
 
 const express = require("express");
-// const { where, Sequelize } = require("../config/database");
 const router = express.Router(); // Used to create a new router object to handling a request
 const db = require("../config/database");
 const teacherModel = require("../models/teacher");
@@ -13,42 +12,28 @@ const teacherassignedcourse = require("../models/teacherAssignedClass");
 const sequelize = require("sequelize");
 const { send } = require("express/lib/response");
 const { where } = require("../config/database");
-// const { Op } = sequelize;
 const app = express();
 
-teacherModel.hasOne(teacherassignedcourse, {
+teacherModel.hasMany(teacherassignedcourse, {
   foreignKey: "teacher_id",
 });
+/***************************************** SHOW ALL TEACHERS INFORMATION******************************************/
 
-// Get
-router.get("/", (req, res) =>
-  teacherModel
-    .findAll()
-    .then((teacher) => {
-      res.json(teacher).status(200);
-    })
-    .catch((err) =>
-      console.log(err, () => {
-        res.send(err);
-      })
-    )
-);
-
-// Find all teachers information
 async function AllInfo() {
   return await teacherModel.findAll({
     include: [
       {
-        model: Class,
+        model: teacherassignedcourse,
       },
     ],
   });
 }
-router.get("/All", async (req, res) => {
+router.get("/", async (req, res) => {
   let result = await AllInfo();
   res.json(result).status(200);
 });
-// Add  a new teacher
+
+/***************************************** ADD NEW TEACHER ******************************************/
 router.post("/", async function (req, res) {
   console.log(req.body);
   teacherModel
@@ -59,49 +44,42 @@ router.post("/", async function (req, res) {
       phone: req.body.phone,
       address: req.body.address,
     })
-    .then((teacher) => res.json(teacher))
+    .then((teacher) => res.json(teacher).status(200))
     .catch((err) => console.log(err));
   console.log(req);
 });
 
-// Search by student_ID
-router.get("/search/:id", (req, res) => {
-  let { id } = req.params;
-  console.log(id);
-  teacherModel
-    .findAll({
-      where: {
-        teacher_id: id,
-        $or: [
-          { email: id }, //req.body.email },
-          { phone: id }, //req.body.phone },
-          { address: id }, //req.body.address },
-        ],
-      },
-    })
-    .then((teacher) => {
-      res.json(teacher);
-    });
-});
-// /searchBy/type = phone
-router.get("/searchSp", (req, res) => {
-  let { id } = req.params;
-  let filter = {};
-  let { q } = req.query;
-  teacherModel
-    .findAll({
-      where: {
-        teacher_name: {
-          //  [sequelize.Op.like]: `${q}%`,
-        },
-      },
-    })
-    .then((teacher) => {
-      res.json(teacher);
-    });
-});
+/***************************************** SEARCH BY TEACHER ID ******************************************/
+router.get("/:id", (req, res) => {
+  let { id } = req.params.id;
+  console.log(req.query);
+  console.log(req.query.value);
+  console.log(Object.entries(req.params));
+  let str = Object.values(req.params)[0];
+  let ans;
+  console.log("---", str);
 
-// Delete a teacher  by ID
+  if (str.charAt(0) === '"' && str.charAt(str.length - 1) === '"') {
+    ans = str.substr(1, str.length - 2);
+  }
+  console.log(`----------->`, ans);
+
+  // teacherModel
+  //   .findAll({
+  //     where: {
+  //       teacher_id: id,
+  //       // $or: [
+  //       //   { email: id }, //req.body.email },
+  //       //   { phone: id }, //req.body.phone },
+  //       //   { address: id }, //req.body.address },
+  //       // ],
+  //     },
+  //   })
+  //   .then((teacher) => {
+  //     res.json(teacher);
+  //   });
+});
+/***************************************** DELETE A TEACHER BY ID ******************************************/
 router.delete("/:id", (req, res) => {
   const { id } = req.params;
   console.log(id);
@@ -110,7 +88,6 @@ router.delete("/:id", (req, res) => {
       .destroy({
         where: {
           teacher_id: id,
-          // [sequelize.Op.and]: [{ model.teacher_id: 2 }],
         },
         include: [
           {
@@ -119,19 +96,19 @@ router.delete("/:id", (req, res) => {
         ],
       })
       .then(() => {
-        res.send("Ok"); //Delete Successfully Done
+        res.send("DELETED"); //Delete Successfully Done
       });
   });
 });
 
-// Update the data
+/***************************************** UPDATE A TEACHER INFORMATION ******************************************/
 router.patch("/:id", async function (req, res) {
   console.log(req.body);
   const { id } = req.params;
   teacherModel
     .update(
       {
-        teacher_id: req.body.teacher_id, //req.body.student_id
+        teacher_id: req.body.teacher_id,
         teacher_name: req.body.teacher_name,
         email: req.body.email,
         phone: req.body.phone,
