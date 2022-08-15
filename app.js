@@ -3,7 +3,7 @@ const path = require("path");
 
 const app = express();
 const bodyParser = require("body-parser");
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 //Create a server
 const port = process.env.port || 3001;
 app.get("/", (req, res) => res.send("INDEX"));

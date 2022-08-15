@@ -1,6 +1,6 @@
 const Sequelize = require("sequelize");
 const db = require("../config/database");
-const studentClass = require("../models/student_classes");
+const teacher = require("../models/teacher");
 
 const model = db.define(
   "classes",
@@ -35,4 +35,9 @@ const model = db.define(
 model.associate = (models) => {
   model.hasOne(stcc, { foreignKey: "name" });
 };
+
+teacher.associate = (model) => {
+  teacher.belongsTo(model, { foreignKey: "teacher_id" });
+};
+//
 module.exports = model;

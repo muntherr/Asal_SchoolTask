@@ -25,10 +25,10 @@ const model = db.define(
   {
     timestamps: false,
     tableName: "student_classes",
-    onUpdate: "CASCADE",
-    onDelete: "CASCADE",
   }
 );
+
+
 Classes.associate = (model) => {
   Classes.belongsTo(model, { foreignKey: "name" });
 };

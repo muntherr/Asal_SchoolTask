@@ -11,13 +11,7 @@ const studentClass = require("../models/student_classes");
 const Class = require("../models/class");
 const res = require("express/lib/response");
 const studentClassOP = { studentClass };
-// const bodyParser = require("body-parser"); // Middle ware to parse the request of json
 const { append } = require("express/lib/response");
-// var app = express();
-
-// //MiddleWare
-// app.use(bodyParser);
-// app.use(express.urlencoded({ extended: false }));
 
 Class.hasOne(studentClass, {
   foreignKey: "name",
@@ -25,7 +19,8 @@ Class.hasOne(studentClass, {
 studentClass.belongsTo(Class, {
   foreignKey: "name",
 });
-// Get
+
+// Get defualt end point
 router.get("/", (req, res) =>
   studentClass
     .findAll()
@@ -41,7 +36,7 @@ router.get("/", (req, res) =>
 );
 
 // Find specific class room
-async function callsom() {
+async function specClass() {
   let class_ = studentClassOP.name;
   return await studentClass.findOne({
     where: {
@@ -52,8 +47,8 @@ async function callsom() {
 
 router.get("/all", async (req, res) => {
   // Return all info about the studentclass table
-  const project = await callsom();
-  res.send(project);
+  const result = await specClass();
+  res.send(result);
 });
 
 // Find all information between the classes and the student class
@@ -66,34 +61,13 @@ async function AllInfo() {
     ],
   });
 }
-// router.get("/AllSC", async (req, res) => {
-//   // Return all information between the class and student class table
-//   let result = await AllInfo();
-//   res.json(result).status(200);
-// });
+router.get("/AllSC", async (req, res) => {
+  // Return all information between the class and student class table
+  let result = await AllInfo();
+  res.json(result).status(200);
+});
 
-// // Add
-// router.get("/add", (req, res) => {
-//   const data = {
-//     student_id: 117,
-//     name: "Masri109",
-//     date_from: "2022-5-01",
-//     date_to: "2022-3-01",
-//     // class_FK: "Masri304",
-//     // student_fk: 118,
-//   };
-//   let { student_id, name, date_from, date_to } = data;
-//   studentClass
-//     .create({
-//       student_id,
-//       name,
-//       date_from,
-//       date_to,
-//     })
-//     .then((student_classes) => res.redirect(200, "/"))
-//     .catch((err) => console.log(err));
-// });
-
+// Create a new record to the table
 router.post("/ClassLink", async function (req, res) {
   console.log(req.body);
 
@@ -139,7 +113,11 @@ router.get("/SearchByID/:id/:name", (req, res) => {
       },
     })
     .then((studentClassOP) => {
-      res.json(studentClassOP);
+      if (studentClassOP) {
+        res.json(studentClassOP);
+      } else {
+        res.status(404).send();
+      }
     });
 });
 
