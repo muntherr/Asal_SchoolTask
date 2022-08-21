@@ -44,7 +44,11 @@ router.post("/", async function (req, res) {
       phone: req.body.phone,
       address: req.body.address,
     })
-    .then((teacher) => res.json(teacher).status(200))
+    .then((teacher) => {
+      console.log("Teacher has been successfully added ..");
+
+      res.json(teacher).status(200);
+    })
     .catch((err) => console.log(err));
   console.log(req);
 });
@@ -120,7 +124,9 @@ router.patch("/:id", async function (req, res) {
         },
       }
     )
-    .then((teacher) => res.json(teacher))
+    .then((teacher) => {
+      res.json(teacher);
+    })
     .catch((err) => console.log(err));
   console.log(req);
 });

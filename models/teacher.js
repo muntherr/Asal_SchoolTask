@@ -2,7 +2,7 @@ const Sequelize = require("sequelize");
 const db = require("../config/database");
 const classes = require("../models/class");
 
-const teacherAssignedClass = require("../models/teacherAssignedClass");
+const teacherAssignedClass = require("../models/teacherassignedclass");
 const model = db.define(
   "teacher",
   {
@@ -10,15 +10,10 @@ const model = db.define(
       type: Sequelize.INTEGER,
       primaryKey: true,
       unique: true,
-      validate: {
-        notEmpty: {
-          args: true,
-          msg: "Teacher name is required!",
-        },
-      },
     },
     teacher_name: {
       type: Sequelize.STRING,
+      allowNull: true,
     },
     email: {
       type: Sequelize.STRING,
